@@ -10,6 +10,9 @@ const App = () => {
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -36,12 +39,21 @@ const App = () => {
       })     
       window.localStorage.setItem(        
         'loggedBlogUser', JSON.stringify(user)      
-        ) 
+      )
+      blogService.setToken(user.token) 
       setUser(user)      
       setUsername('')      
       setPassword('')    
     } catch (exception) {      
-      setErrorMessage('Wrong credentials')      
+      setErrorMessage(  {
+      text: 'Wrong Username or Password',
+      color: 'red',
+      fontWeight: 'bold',
+      fontSize: '16px',
+      background: 'lightgrey',
+      borderStyle: 'solid',
+      borderRadius: '5px',
+      padding: '10px'})      
       setTimeout(() => {        
         setErrorMessage(null)      
       }, 5000)    
@@ -100,9 +112,80 @@ const App = () => {
     )
   }
 
+  const addBlog = async (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url
+    }
+
+    try {
+      const returnedBlog = await blogService.create(blogObject)
+      setBlogs(blogs.concat(returnedBlog))
+      setErrorMessage(  {
+        text: `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
+        color: 'green',
+        fontWeight: 'bold',
+        fontSize: '16px',
+        background: 'lightgrey',
+        borderStyle: 'solid',
+        borderRadius: '5px',
+        padding: '10px'})  
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+    catch (error){
+      console.log("error in addBlog function")
+      setErrorMessage('Error adding blog') 
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+
+  }
+
+
+  const blogForm = () => (
+    <form onSubmit={addBlog}>
+
+      <div>
+        title:
+        <input
+          value={title}
+          name = "title"
+          onChange={({ target }) => setTitle(target.value)}
+        />
+      </div>
+
+      <div>
+        author:
+        <input 
+          value={author}
+          name = "Author"
+          onChange={({ target }) => setAuthor(target.value)}
+        />
+      </div>
+
+      <div>
+        URL:
+        <input 
+          value={url}
+          name = "URL"
+          onChange={({ target }) => setUrl(target.value)}
+        />
+      </div>
+
+    <button type="submit">create</button>
+
+    </form>  
+  )
+
+
   return (
     <div>
-      <h2>blogs</h2>
+      <h2>blogs application</h2>
 
       <Notification message={errorMessage} />
 
@@ -110,9 +193,11 @@ const App = () => {
     {user && <div>
        <p>{user.name} logged in</p>
        <button onClick={handleLogout}>logout</button>
+       <h2>create new</h2>
+       {blogForm()}
       </div>
     }
-
+      <h2>Saved blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
