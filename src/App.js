@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login' 
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -13,6 +14,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const togglableRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -114,6 +116,7 @@ const App = () => {
 
   const addBlog = async (event) => {
     event.preventDefault()
+    togglableRef.current.toggleVisibility()
     const blogObject = {
       title: title,
       author: author,
@@ -146,40 +149,41 @@ const App = () => {
 
   }
 
-
   const blogForm = () => (
-    <form onSubmit={addBlog}>
+    <Togglable buttonLabel="new note" ref={togglableRef}>
+      <form onSubmit={addBlog}>
 
-      <div>
-        title:
-        <input
-          value={title}
-          name = "title"
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
+        <div>
+          title:
+          <input
+            value={title}
+            name = "title"
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
 
-      <div>
-        author:
-        <input 
-          value={author}
-          name = "Author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
+        <div>
+          author:
+          <input 
+            value={author}
+            name = "Author"
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </div>
 
-      <div>
-        URL:
-        <input 
-          value={url}
-          name = "URL"
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
+        <div>
+          URL:
+          <input 
+            value={url}
+            name = "URL"
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </div>
 
-    <button type="submit">create</button>
+      <button type="submit">create</button>
 
-    </form>  
+      </form> 
+    </Togglable> 
   )
 
 
