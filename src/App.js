@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login' 
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,9 +12,6 @@ const App = () => {
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const togglableRef = useRef()
 
   useEffect(() => {
@@ -114,14 +112,10 @@ const App = () => {
     )
   }
 
-  const addBlog = async (event) => {
-    event.preventDefault()
+  const addBlog = async (blogObject) => {
+   
     togglableRef.current.toggleVisibility()
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url
-    }
+
 
     try {
       const returnedBlog = await blogService.create(blogObject)
@@ -151,38 +145,7 @@ const App = () => {
 
   const blogForm = () => (
     <Togglable buttonLabel="new note" ref={togglableRef}>
-      <form onSubmit={addBlog}>
-
-        <div>
-          title:
-          <input
-            value={title}
-            name = "title"
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-
-        <div>
-          author:
-          <input 
-            value={author}
-            name = "Author"
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-
-        <div>
-          URL:
-          <input 
-            value={url}
-            name = "URL"
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-
-      <button type="submit">create</button>
-
-      </form> 
+      <BlogForm createBlog={addBlog} />
     </Togglable> 
   )
 
