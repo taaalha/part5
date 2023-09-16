@@ -15,9 +15,14 @@ const App = () => {
   const togglableRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    const fetchBlogs = async () => {
+    const blogArray = await blogService.getAll()
+    if (blogArray) {
+      const sortedBlogs = blogArray.sort((a, b) => b.likes - a.likes)
+      setBlogs( sortedBlogs )
+    }
+  }
+    fetchBlogs()
   }, [])
 
   useEffect(() => {    
