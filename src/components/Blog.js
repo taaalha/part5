@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
 
-const Blog = ({blog, onLike}) => {
+const Blog = ({blog, onLike, onDelete, user}) => {
 
   const [showDetails, setShowDetails] = useState(false)
-
+  const [isHovered, setIsHovered] = useState(false)
 
   const toggleDetails = () => {
     setShowDetails(!showDetails)
@@ -19,6 +19,15 @@ const Blog = ({blog, onLike}) => {
     marginBottom: 5
   }
 
+  const buttonStyle = {
+    backgroundColor: isHovered ? '#87CEEB' : '',
+    color: 'black',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s' 
+  }
+
+
+
   return (
   <div style={blogStyle}> 
     {blog.title} <button onClick={toggleDetails}>{showDetails ? 'hide' : 'view'}</button> <br />
@@ -26,7 +35,17 @@ const Blog = ({blog, onLike}) => {
         <div>
           <div>{blog.url} <br /> </div>
           <div> likes {blog.likes} <button onClick={onLike} > like </button>  </div>
-          {blog.author}
+          {blog.author} <br />
+          {blog.user.length >0 && blog.user[0].username === user.username && 
+          <button 
+          style={buttonStyle} 
+          onClick={onDelete}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          >
+            remove
+          </button>}
+          
         </div>
           )}
   </div>        
