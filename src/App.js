@@ -6,6 +6,7 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')   
@@ -152,6 +153,8 @@ const App = () => {
     <Togglable buttonLabel="new note" ref={togglableRef}>
       <BlogForm createBlog={addBlog} />
     </Togglable> 
+
+    
   )
 
   const handleLike = async (blog) => {
