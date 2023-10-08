@@ -9,7 +9,7 @@ test('renders content', () => {
   const blog = {
     title: 'Component testing is done with react-testing-library',
     author: 'Test Author',
-    url: 'https://reacttestinglibrary.com/docs/example-input-event',
+    url: 'https://google.com',
     likes: 0
   }
     const component = render(
@@ -22,7 +22,7 @@ test('renders content', () => {
         'Test Author'
     )
     expect(component.container).not.toHaveTextContent(
-        'https://reacttestinglibrary.com/docs/example-input-event'
+        'https://google.com'
     )
     expect(component.container).not.toHaveTextContent(
         'likes'
@@ -34,7 +34,7 @@ test('clicking the button shows url and likes', async () => {
     const blog = {
         title: 'Component testing is done with react-testing-library',
         author: 'Test Author',
-        url: 'https://reacttestinglibrary.com/docs/example-input-event',
+        url: 'https://google.com',
         likes: 0,
         user: [{username: 'testuser'}]
     }
@@ -54,7 +54,7 @@ test('clicking the button shows url and likes', async () => {
     expect(hideButton).toBeInTheDocument()
 
     expect(screen.getByText('Test Author')).toBeDefined()
-    expect(screen.getByText('https://reacttestinglibrary.com/docs/example-input-event')).toBeDefined()
+    expect(screen.getByText('https://google.com')).toBeDefined()
     expect(screen.getByText(/likes/)).toBeDefined()
 })
 
@@ -63,7 +63,7 @@ test('clicking the like button twice calls event handler twice', async () => {
     const blog = {
         title: 'Component testing is done with react-testing-library',
         author: 'Test Author',
-        url: 'https://reacttestinglibrary.com/docs/example-input-event',
+        url: 'https://google.com',
         likes: 0,
         user: [{username: 'testuser'}]
     }
@@ -83,11 +83,11 @@ test('clicking the like button twice calls event handler twice', async () => {
 
     const likeButton = await screen.findByText('like')
     expect(likeButton).toBeInTheDocument()
-    screen.debug()
+
 
     await userEvent.click(likeButton)
     await userEvent.click(likeButton)
-    screen.debug()
+
 
     expect(mockHandler.mock.calls).toHaveLength(2)
 })

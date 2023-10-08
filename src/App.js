@@ -153,8 +153,6 @@ const App = () => {
     <Togglable buttonLabel="new note" ref={togglableRef}>
       <BlogForm createBlog={addBlog} />
     </Togglable> 
-
-    
   )
 
   const handleLike = async (blog) => {
