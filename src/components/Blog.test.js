@@ -57,3 +57,39 @@ test('clicking the button shows url and likes', async () => {
     expect(screen.getByText('https://reacttestinglibrary.com/docs/example-input-event')).toBeDefined()
     expect(screen.getByText(/likes/)).toBeDefined()
 })
+
+//Make a test, which ensures that if the like button is clicked twice, the event handler the component received as props is called twice.
+test('clicking the like button twice calls event handler twice', async () => {
+    const blog = {
+        title: 'Component testing is done with react-testing-library',
+        author: 'Test Author',
+        url: 'https://reacttestinglibrary.com/docs/example-input-event',
+        likes: 0,
+        user: [{username: 'testuser'}]
+    }
+
+    const user = {
+        username: 'testuser'
+    }
+
+    const mockHandler = jest.fn()
+
+    render(
+        <Blog blog={blog} user={user} onLike={mockHandler} />
+    )
+
+    const button = screen.getByText('view')
+    await userEvent.click(button)
+
+    const likeButton = await screen.findByText('like')
+    expect(likeButton).toBeInTheDocument()
+    screen.debug()
+
+    await userEvent.click(likeButton)
+    await userEvent.click(likeButton)
+    screen.debug()
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
+})
+
+    
