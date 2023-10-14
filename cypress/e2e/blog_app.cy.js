@@ -38,4 +38,28 @@ describe('Blog app', function() {
     })
   })
 
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.get('#username').type('test_user')
+      cy.get('#password').type('test1234')
+      cy.get('#login-button').click()
+      cy.contains('local test user logged in')
+    })
+
+    it('A blog can be created', function() {
+      cy.contains('new blog').click()
+      cy.get('#title').type('test blog')
+      cy.get('#author').type('test author')
+      cy.get('#url').type('test url')
+      cy.get('#create-button').click()
+
+      cy.contains('test blog')
+      cy.get('.error')
+      .should('contain', 'A new blog test blog by test author added')
+      .and('have.css', 'color', 'rgb(0, 128, 0)')
+
+    })
+  })
+
 })
