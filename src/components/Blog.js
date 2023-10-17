@@ -2,7 +2,8 @@ import { useState } from 'react'
 
 
 const Blog = ({blog, onLike, onDelete, user}) => {
-
+  console.log('blog is', blog)
+  console.log('user is', user)
   const [showDetails, setShowDetails] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
 
@@ -34,7 +35,7 @@ const Blog = ({blog, onLike, onDelete, user}) => {
     {showDetails && (
         <div>
           <div>{blog.url} <br /> </div>
-          <div> likes {blog.likes} <button onClick={onLike} className='likeButton'> like </button>  </div>
+          <div id="likes"> likes {blog.likes} <button onClick={onLike} className='likeButton'> like </button>  </div>
           {blog.author} <br />
           {blog.user.length >0 && blog.user[0].username === user.username && 
           <button 
